@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TickCounter - Premium Countdown</title>
+    <meta name="description" content="A premium, aesthetic countdown timer for your important events.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <canvas id="bg-canvas"></canvas>
+    <canvas id="fireworks-canvas"></canvas>
+    <div class="background-blobs">
+        <div class="grid-overlay"></div>
+        <!-- Blobs kept for subtle color depth behind the stars -->
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <button id="settings-btn" class="settings-btn" aria-label="Settings">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+            </path>
+        </svg>
+    </button>
+
+    <div id="settings-panel" class="settings-panel" hidden>
+        <div class="settings-content">
+            <h2>Configuration</h2>
+            <div class="input-group">
+                <label for="title-input">Title</label>
+                <input type="text" id="title-input" placeholder="TickCounter">
+            </div>
+            <div class="input-group">
+                <label for="date-picker">Target Date</label>
+                <input type="datetime-local" id="date-picker">
+            </div>
+            <button id="close-settings" class="close-btn">Close</button>
+        </div>
+    </div>
+
+    <main class="container">
+        <header>
+            <h1 id="main-title" data-text="TickCounter">TickCounter</h1>
+            <p class="subtitle">Time is ticking. Make it count.:)</p>
+        </header>
+
+        <!-- Input section moved to settings panel -->
+
+        <section class="counter-container" id="counter-container">
+            <div class="time-unit">
+                <div class="value" id="years">00</div>
+                <div class="label">Years</div>
+            </div>
+            <div class="time-unit">
+                <div class="value" id="days">00</div>
+                <div class="label">Days</div>
+            </div>
+            <div class="time-unit">
+                <div class="value" id="hours">00</div>
+                <div class="label">Hours</div>
+            </div>
+            <div class="time-unit">
+                <div class="value" id="minutes">00</div>
+                <div class="label">Minutes</div>
+            </div>
+            <div class="time-unit">
+                <div class="value" id="seconds">00</div>
+                <div class="label">Seconds</div>
+            </div>
+        </section>
+
+        <div class="message" id="message"></div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
