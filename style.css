@@ -16,6 +16,10 @@
     box-sizing: border-box;
 }
 
+[hidden] {
+    display: none !important;
+}
+
 body {
     font-family: var(--font-main);
     background-color: var(--bg-color);
@@ -372,14 +376,16 @@ h1::after {
 .settings-content {
     background: rgba(15, 15, 20, 0.9);
     border: 1px solid var(--glass-border);
-    padding: 3rem;
+    padding: 2rem;
     border-radius: 24px;
     width: 90%;
     max-width: 500px;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
     box-shadow: 0 0 50px rgba(0, 243, 255, 0.1);
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .settings-content h2 {
@@ -477,13 +483,12 @@ input[type="datetime-local"]:focus {
 /* Counter Grid */
 .counter-container {
     display: flex;
-    flex-wrap: nowrap;
-    /* Prevent wrapping for grand single line if possible */
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 4vw;
-    /* Responsive gap */
+    gap: clamp(1rem, 3vw, 3rem);
     margin-top: 0;
     align-items: baseline;
+    max-width: 100%;
 }
 
 .time-unit {
@@ -518,27 +523,25 @@ input[type="datetime-local"]:focus {
 
 .value {
     font-family: var(--font-mono);
-    font-size: 12vw;
-    /* Massive responsive font */
+    font-size: clamp(3rem, 8vw, 8rem);
+    /* Responsive with min and max */
     font-weight: 300;
     line-height: 1.2;
-    /* Increased from 1 to prevent vertical cropping */
     margin-bottom: 0;
     color: white;
     text-shadow: 0 0 40px rgba(0, 243, 255, 0.15);
     letter-spacing: -0.05em;
     padding: 0.5rem;
-    /* Add padding to ensure space for glow/shadow */
 }
 
 .label {
-    font-size: 1rem;
+    font-size: clamp(0.7rem, 1vw, 1.2rem);
     text-transform: uppercase;
-    letter-spacing: 0.5em;
+    letter-spacing: 0.3em;
     color: var(--accent-color);
     font-family: var(--font-mono);
     opacity: 0.5;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
 }
 
@@ -587,34 +590,135 @@ input[type="datetime-local"]:focus {
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+
+/* Large Desktop / Fullscreen */
+@media (min-width: 1920px) {
     .counter-container {
-        flex-wrap: wrap;
-        gap: 2rem;
+        gap: 4rem;
     }
 
-    .value {
-        font-size: 18vw;
-    }
-
-    h1 {
-        font-size: 1.5rem;
-        top: 10%;
-    }
-
-    header {
-        top: 10%;
+    .time-unit {
+        min-width: 150px;
     }
 }
 
-@media (max-width: 480px) {
+/* Desktop / Laptop */
+@media (min-width: 1024px) and (max-width: 1919px) {
+    .counter-container {
+        gap: 2rem;
+    }
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
     .value {
-        font-size: 20vw;
+        font-size: clamp(2.5rem, 10vw, 6rem);
+    }
+
+    .counter-container {
+        gap: 1.5rem;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+}
+
+/* Mobile Landscape & Small Tablets */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .counter-container {
+        gap: 1rem;
+    }
+
+    .time-unit {
+        flex: 1 1 calc(33.333% - 1rem);
+        min-width: 80px;
+    }
+
+    .value {
+        font-size: clamp(2rem, 12vw, 5rem);
+    }
+
+    .label {
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+    }
+
+    .settings-content {
+        padding: 1.5rem;
+        width: 95%;
+    }
+
+    .message {
+        font-size: 8vw;
+        padding: 1.5rem;
+    }
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .counter-container {
+        gap: 0.75rem;
+    }
+
+    .time-unit {
+        flex: 1 1 calc(50% - 0.75rem);
+        min-width: 70px;
+    }
+
+    .value {
+        font-size: clamp(1.5rem, 15vw, 4rem);
+        padding: 0.25rem;
+    }
+
+    .label {
+        font-size: 0.6rem;
+        margin-top: 0.25rem;
     }
 
     .settings-btn {
-        bottom: 1.5rem;
-        right: 1.5rem;
-        padding: 0.8rem;
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.75rem;
+    }
+
+    input[type="datetime-local"],
+    input[type="text"] {
+        font-size: 16px;
+        /* Prevent zoom on iOS */
+        padding: 0.875rem;
+    }
+
+    .settings-content {
+        padding: 1rem;
+    }
+
+    .message {
+        font-size: 10vw;
+        padding: 1rem;
+    }
+}
+
+/* Very Small Screens */
+@media (max-width: 360px) {
+    .value {
+        font-size: clamp(1.2rem, 18vw, 3rem);
+    }
+
+    .label {
+        font-size: 0.5rem;
     }
 }

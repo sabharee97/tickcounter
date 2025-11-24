@@ -365,6 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (diff <= 0) {
                 clearInterval(countdownInterval);
                 counterContainer.hidden = true;
+                counterContainer.style.display = 'none'; // Explicitly hide
                 messageEl.innerHTML = "THE TIME IS NOW";
                 triggerExplosion();
                 return;
