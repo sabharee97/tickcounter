@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainTitle = document.getElementById('main-title');
     const counterContainer = document.getElementById('counter-container');
     const messageEl = document.getElementById('message');
+    document.body.appendChild(messageEl); // Move to body to avoid backdrop-filter containing block issue
     const bgCanvas = document.getElementById('bg-canvas');
     const fwCanvas = document.getElementById('fireworks-canvas');
     const settingsBtn = document.getElementById('settings-btn');
@@ -325,14 +326,39 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const targetDate = new Date(val);
-        setQueryParam('date', val);
+
+        // Format to YYYYMMDDHHMMSS
+        const year = targetDate.getFullYear();
+        const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+        const day = String(targetDate.getDate()).padStart(2, '0');
+        const hours = String(targetDate.getHours()).padStart(2, '0');
+        const minutes = String(targetDate.getMinutes()).padStart(2, '0');
+        const seconds = String(targetDate.getSeconds()).padStart(2, '0');
+        const compactDate = `${year}${month}${day}${hours}${minutes}${seconds}`;
+
+        setQueryParam('date', compactDate);
         startCountdown(targetDate);
+    });
+
+    const messageText = document.getElementById('message-text');
+    const newCountdownBtn = document.getElementById('new-countdown-btn');
+
+    // Add listener for new button
+    newCountdownBtn.addEventListener('click', () => {
+        settingsPanel.hidden = false;
     });
 
     function startClockMode() {
         clearInterval(countdownInterval);
         counterContainer.hidden = false;
-        messageEl.textContent = '';
+        counterContainer.style.display = ''; // Reset display
+
+        // Reset message element completely
+        messageEl.hidden = true;
+        messageEl.style.display = '';
+        messageEl.innerHTML = '';
+
+        document.querySelector('header').hidden = false; // Show header
         els.years.parentElement.style.display = 'none'; // Hide years in clock mode
         els.days.parentElement.style.display = 'none'; // Hide days in clock mode
 
@@ -349,7 +375,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function startCountdown(targetDate) {
         clearInterval(countdownInterval);
         counterContainer.hidden = false;
-        messageEl.textContent = '';
+        counterContainer.style.display = ''; // Reset display to default (flex)
+
+        // Reset message element completely
+        messageEl.hidden = true;
+        messageEl.style.display = ''; // Remove inline flex
+        messageEl.innerHTML = ''; // Clear content
+
+        document.querySelector('header').hidden = false; // Show header
 
         // Reset Three.js if needed (simple reload for now or clear scene)
         if (threeScene) {
@@ -366,7 +399,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearInterval(countdownInterval);
                 counterContainer.hidden = true;
                 counterContainer.style.display = 'none'; // Explicitly hide
-                messageEl.innerHTML = "THE TIME IS NOW";
+                document.querySelector('header').hidden = true; // Hide header to prevent overlap
+
+                messageEl.hidden = false;
+                messageEl.style.display = 'flex'; // Force flex display
+                messageEl.hidden = false;
+                messageEl.style.display = 'flex'; // Force flex display
+                messageEl.innerHTML = `
+                    <div class="message-content" style="flex-shrink: 0; min-width: 300px; width: 90%; max-width: 800px; display: flex; flex-direction: column; align-items: center; gap: 2rem; background: black; border: 2px solid #00f3ff; border-radius: 20px; padding: 3rem;">
+                        <div style="font-size: clamp(1.5rem, 4vw, 3rem); color: #00f3ff; text-shadow: 0 0 20px rgba(0, 243, 255, 0.8); margin-bottom: 1rem; text-align: center; width: 100%;">THE TIME IS</div>
+                        <div style="font-size: clamp(3rem, 8vw, 6rem); color: #ffffff; text-shadow: 0 0 30px rgba(0, 243, 255, 1); line-height: 1; text-align: center; width: 100%;">NOW</div>
+                        <button id="new-countdown-btn-dynamic" style="
+                            margin-top: 2rem;
+                            padding: 1rem 2rem;
+                            background: #00f3ff;
+                            color: black;
+                            border: none;
+                            border-radius: 50px;
+                            font-family: 'Space Mono', monospace;
+                            font-weight: bold;
+                            cursor: pointer;
+                            pointer-events: auto;
+                            font-size: 1rem;
+                            text-transform: uppercase;
+                            letter-spacing: 0.1em;
+                            box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+                            width: auto;
+                            min-width: 200px;
+                        ">Create New Countdown</button>
+                    </div>
+                `;
+
+                // Re-attach event listener to the new dynamic button
+                setTimeout(() => {
+                    const dynamicBtn = document.getElementById('new-countdown-btn-dynamic');
+                    if (dynamicBtn) {
+                        dynamicBtn.addEventListener('click', () => {
+                            document.getElementById('settings-panel').hidden = false;
+                        });
+                    }
+                }, 0);
+
                 triggerExplosion();
                 return;
             }
